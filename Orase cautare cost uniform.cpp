@@ -320,6 +320,7 @@ int cautareCostUniform(int start, int stop, int A[20][20], char *nume[20]) {
 
 	while (gasit == 0 && nrNoduri > 0) {
         int pozInsert;
+        int pozAcelasi=0;
 		int nod = noduri[0];
 		//cout << nume[nod] << " ";
 		for (int i = 0;i < nrNoduri - 1;i++)
@@ -340,15 +341,18 @@ int cautareCostUniform(int start, int stop, int A[20][20], char *nume[20]) {
                     cost[i]=cost[nod]+A[nod][i];
                     //cout<<"test";
 
-                    for(int j=0;j<nrNoduri;j++)//aici verifica daca in stiva curenta se haseste acelasi nod pentru a fi inlocuit direct
+                    for(int j=0;j<nrNoduri;j++)//aici verifica daca in stiva curenta se haseste acelasi nod pentru a fi eliminat din lista
                         if(cost[noduri[j]]>=cost[i]&&noduri[j]==i){
                         ok=1;
-                        pozInsert=j;
-                        break;}
+                        pozAcelasi=j;
+                        nrNoduri--;
+                        break;
+                        }
 
                     if(ok==1)
-                        noduri[pozInsert]=i;
-                    else{//cazul in care nu se gaseste acelasi nod
+                        for(int j=pozAcelasi;j<nrNoduri;j++)
+                            noduri[j]=noduri[j+1];
+
 					for(int j=0;j<nrNoduri;j++)
                         if(cost[noduri[j]]>=cost[i]){
                         pozInsert=j;
@@ -356,7 +360,7 @@ int cautareCostUniform(int start, int stop, int A[20][20], char *nume[20]) {
                     for(int j=nrNoduri-1;j>=pozInsert;j--)
                         noduri[j+1]=noduri[j];
                         nrNoduri++;
-                        }
+
                     //cout<<pozInsert<<endl;
                     noduri[pozInsert]=i;
 
@@ -450,3 +454,4 @@ int main() {
 	_getch();
 	return 0;
 }
+
